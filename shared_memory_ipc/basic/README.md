@@ -84,4 +84,6 @@ Consumer received: Hello from Producer
 ```
 
 ---
+Note:
+Start producer first
 

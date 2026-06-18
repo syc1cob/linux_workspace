@@ -149,9 +149,11 @@ Producer starts.
 
 Producer:
 
-1. Creates shared memory
-2. Maps shared memory
-3. Writes message
+1. Opens or creates the shared memory object
+2. Maps the shared memory
+3. Writes the message
+4. Signals the semaphore
+
 
 ```text
 Hello from Producer using Shared Memory + Semaphore
@@ -208,16 +210,11 @@ gcc consumer.c -o consumer -pthread
 
 Open Terminal 1:
 
-```bash
 ./consumer
-```
 
 Output:
 
-```text
-Consumer: Waiting for producer...
-```
-
+Consumer: Waiting for notification...
 ---
 
 Open Terminal 2:
@@ -229,7 +226,7 @@ Open Terminal 2:
 Output:
 
 ```text
-Producer: Message written.
+Producer: Writing data...
 Producer: Notification sent.
 ```
 
@@ -341,4 +338,9 @@ If a process is waiting, it is awakened.
 ```c
 sem_post(sem);
 ```
-
+> Note:
+>
+> Either process can be started first.
+> Both the producer and consumer use `O_CREAT` when opening
+> the shared memory and semaphore. The first process creates
+> the IPC objects, and the second process opens the existing ones.
